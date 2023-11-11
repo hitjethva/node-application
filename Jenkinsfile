@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Deploy to Vultr') {
             steps{
-                sh "sed -i 's/node-app:latest/node-app:${env.BUILD_ID}/g' deployment.yml"
+            
 kubernetesDeploy(configs: "deployment.yml", "service.yml", kubeconfigId: 'kubeconfig')
             }
         }
