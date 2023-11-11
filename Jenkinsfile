@@ -32,7 +32,13 @@ pipeline {
         stage('Deploy to GKE') {
             steps{
                 sh "sed -i 's/node-app:latest/node-app:${env.BUILD_ID}/g' deployment.yml"
-                step([$class: 'KubernetesEngineBuilder', manifestPattern: 'deployment.yml', credentialsId: kubeconfig])
+                script {
+                    withCredentials([usernamePassword(credentialsId: kubeconfig)]) {
+
+                        sh "kubectl apply -f deployment.yml"
+                        sh "kubectl apply -f service.yml"
+                    }
+                    }
             }
         }
     }
