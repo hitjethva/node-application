@@ -1,49 +1,40 @@
 pipeline {
-
-  environment {
-    dockerimagename = "hitjethva/node-app"
-    dockerImage = ""
-  }
-
-  agent any
-
-  stages {
-
-    stage('Checkout Source') {
-      steps {
-        git 'https://github.com/hitjethva/node-application.git'
-      }
+    agent any
+    environment {
+        PROJECT_ID = 'PROJECT-ID'
+        CLUSTER_NAME = 'CLUSTER-NAME'
+        LOCATION = 'CLUSTER-LOCATION'
+        CREDENTIALS_ID = 'vultr'
     }
-
-    stage('Build image') {
-      steps{
-        script {
-          dockerImage = docker.build dockerimagename
+    stages {
+        stage("Checkout code") {
+            steps {
+                checkout scm
+            }
         }
-      }
-    }
-
-    stage('Pushing Image') {
-      environment {
-               registryCredential = 'dockerhub-credential'
-           }
-      steps{
-        script {
-          docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("latest")
-          }
+        stage("Build image") {
+            steps {
+                script {
+                    myapp = docker.build("hitjethva/node-app:${env.BUILD_ID}")
+                }
+            }
         }
-      }
-    }
-
-    stage('Deploying React.js container to Kubernetes') {
-      steps {
-        script {
+        stage("Push image") {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                            myapp.push("latest")
+                            myapp.push("${env.BUILD_ID}")
+                    }
+                }
+            }
+        }
+        stage('Deploy to Vultr') {
+            steps{
+                script {
           kubernetesDeploy(configs: "deployment.yml", "service.yml")
         }
-      }
+            }
+        }
     }
-
-  }
-
 }
