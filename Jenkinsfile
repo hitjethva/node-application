@@ -4,7 +4,7 @@ pipeline {
         PROJECT_ID = 'vultr'
         CLUSTER_NAME = 'cluster'
         LOCATION = 'usa'
-        CREDENTIALS_ID = 'vultr'
+        CREDENTIALS_ID = 'kubeconfig'
     }
     stages {
         stage("Checkout code") {
