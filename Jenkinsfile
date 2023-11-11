@@ -29,11 +29,11 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to Vultr') {
+        stage('Deploy to Vultr test cluster') {
             steps{
-                script {
-          kubernetesDeploy(configs: "deployment.yml", "service.yml")
-        }
+            sh "sed -i 's/node-app:latest/node-app:${env.BUILD_ID}/g' deployment.yml"
+            step([$class: 'KubernetesEngineBuilder', projectId: vultr, clusterName: cluster, location: usa, manifestPattern: 'deployment.yml', credentialsId: kubeconfig, verifyDeployments: true])
+            }
             }
         }
     }
