@@ -37,9 +37,11 @@ stage('List pods') {
                     contextName: 'vke-f8b207b8-1f1a-4781-a86b-d3c8c7f3bc60',
                     clusterName: 'vke-f8b207b8-1f1a-4781-a86b-d3c8c7f3bc60',
                     namespace: 'default'
-                    ]) {
+                    ]) 
+        {
       sh 'kubectl get nodes'
-      }                                    
+      }                
+}
         
         stage('Deploy to GKE') {
             steps{
