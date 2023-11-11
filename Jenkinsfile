@@ -32,7 +32,7 @@ pipeline {
         stage('Deploy to GKE') {
             steps{
                 sh "sed -i 's/node-app:latest/node-app:${env.BUILD_ID}/g' deployment.yml"
-                step([$class: 'KubernetesEngineBuilder', projectId: vultr, clusterName: cluster, location: usa, manifestPattern: 'deployment.yml', credentialsId: kubeconfig, verifyDeployments: true])
+                step([$class: 'KubernetesEngineBuilder', manifestPattern: 'deployment.yml', credentialsId: kubeconfig])
             }
         }
     }
