@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: node-app
+labels:
+  app: node-app
+spec:
+strategy:
+  type: Recreate
+template:
+  metadata:
+    labels:
+      app: node-app
+      tier: node-app
+  spec:
+    containers:
+    - name: node-app
+      image: hitjethva/node-app:latest
+      imagePullPolicy: Always
+      ports:
+      - containerPort: 8080
+        name: node-app
