@@ -32,7 +32,7 @@ pipeline {
         stage('Deploy to Vultr') {
             steps{
                 script {
-          kubernetesDeploy(configs: "deployment.yml", "service.yml")
+          kubernetesDeploy(configs: "deployment.yml", "service.yml", kubeconfigId: 'kubeconfig')
         }
             }
         }
