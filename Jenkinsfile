@@ -34,7 +34,7 @@ stage("Deploy to Vultr Kubernetes") {
     steps {
         sh "sed -i 's/node-app:latest/node-app:${env.BUILD_ID}/g' deployment.yml"
                 script {
-    withKubeConfig([credentialsId: 'kubeconfig', serverUrl: 'https://661edeef-dbc7-4402-8a78-1d86d1651cf1.vultr-k8s.com:6443']) 
+    withKubeConfig([credentialsId: 'kubeconfig']) 
         {
       sh 'kubectl get nodes'
       sh "kubectl apply -f deployment.yml"
