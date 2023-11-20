@@ -15,14 +15,14 @@ pipeline {
         stage("Build image") {
             steps {
                 script {
-                    myapp = docker.build("hitjethva/node-app:${env.BUILD_ID}")
+                    myapp = docker.build("sjc.vultrcr.com/jenkinsregistry/node-app:${env.BUILD_ID}")
                 }
             }
         }
         stage("Push image") {
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-credential') {
+                    docker.withRegistry('https://sjc.vultrcr.com/jenkinsregistry', 'vcr-credentials') {
                             myapp.push("latest")
                             myapp.push("${env.BUILD_ID}")
                     }
